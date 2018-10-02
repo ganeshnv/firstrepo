@@ -1,0 +1,16 @@
+# We are being using wget command for all remote installing purposes. In this case if we add the below parameters along with the wget command its helps to avoid download our scripts on client servers and we don't want to change execute permission or use addition command like sh <script name> <parameter>
+
+
+It will run on the fly.
+
+
+Ex:
+
+installation: ( plan script )
+
+wget -O - https://gitlab.com/<script> | bash
+
+
+Passwordless_servers ( Parameter script)
+
+wget  -O - http://gitlab.com/<script> | bash -s - <destination_node_ip> <destination_node_port>
