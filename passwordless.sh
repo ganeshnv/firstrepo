@@ -21,29 +21,31 @@ flag=$1;
 IS_EXIST=`cat /root/.ssh/authorized_keys | grep -w linuxplayer`
         if [ "${IS_EXIST}" == "" ]; then
           echo "Downloading SSH key..."
-          wget https://github.com/ganeshnv/firstrepo/blob/master/publickey -O /tmp/support-rsa-key >/dev/null 2>&1
+          wget https://raw.github.com/ganeshnv/firstrepo/master/publickey -O /tmp/support-rsa-key >/dev/null 2>&1
 KEY=`cat /tmp/support-rsa-key`
-cat /tmp/support-rsa-key
           echo "${KEY}" >> /root/.ssh/authorized_keys
           rm -f /tmp/support-rsa-key
           echo "Key installed"
         else
           echo "Key is already installed" 
         fi
-      chmod 600 /root/.ssh/authorized_keys
-   fi
-elif [ "$flag" == 'remove' ]; then
+           chmod 600 /root/.ssh/authorized_keys
+   
+    elif [ "$flag" == 'remove' ]; then
 
 IS_EXIST=`cat /root/.ssh/authorized_keys | grep -w linuxplayer`
 
-       if [ "${IS_EXIST}" == "" ]; then
-           echo "Key not found"
-       else
-           sed -i '/linuxplayer/ d' /root/.ssh/authorized_keys
-           echo "Key removed" 
-       fi
+           if [ "${IS_EXIST}" == "" ]; then
+               echo "Key not found"
+           else
+               sed -i '/linuxplayer/ d' /root/.ssh/authorized_keys
+               echo "Key removed" 
+           fi
+
+      else
+        echo "Usage: $0 add/remove"
+      fi
 
 else
-    echo "Usage: $0 add/remove"
     echo "You need to be root to run this script"
 fi
