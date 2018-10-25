@@ -1,0 +1,67 @@
+Device info:
+ #cd /proc/scsi/
+ 
+ 
+ 
+ 
+ 
+ 
+ openssl x509 -text -in /dev/stdin | grep "Signature Algorithm"
+ openssl s_client -connect IP:PORT < /dev/null 2>/dev/null | openssl pkcs7 -print_certs -text -noout |grep  "Subject:"
+ openssl s_client -connect IP:PORT < /dev/null 2>/dev/null | openssl dgst -sha256 -verify
+ openssl s_client -connect IP:PORT < /dev/null 2>/dev/null | openssl sha1
+ openssl x509 -in cert.cer -noout -issuer
+ openssl s_client -connect IP:PORT -cipher "DES:3DES" -tls1_2
+ openssl ciphers -v  "ciphername"
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
