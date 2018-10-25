@@ -1,0 +1,10 @@
+find process memory utility
+
+i=`pgrep -f /path of the process file/`
+for PID in `echo $i`
+do
+ps -ef | grep $PID 
+cat /proc/$PID/status | grep VmRSS
+PMEM=`cat /proc/$PID/status | grep VmRSS | awk '{print $2}'`
+echo `expr $PMEM / 1024 ` MB
+done
