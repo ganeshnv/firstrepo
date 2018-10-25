@@ -1,8 +1,23 @@
 echo_pwd.sh
 #!/bin/sh
-echo UGFzc3dvcmQxCg== | openssl enc -base64 -d
+echo dGVzdAo | openssl enc -base64 -d
 
 
 
 echo "test" | openssl enc -base64        to encode
 echo "dGVzdAo=" | openssl enc -base64 -d    to decode
+
+Private key
+openssl pkcs12 -in cert.pfx -nocerts -out key.pem
+
+Certificate
+openssl pkcs12 -in cert.pfx -clcerts -nokeys -out cert.pem 
+
+================
+<role rolename="manager-gui"/>
+  <user username="tomcat" password="tomcat" roles="manager-gui"/>
+================
+
+
+wget
+wget -nv --no-cache -O - http://localhost/script.sh | bash -s - <parameter>
