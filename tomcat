@@ -1,0 +1,8 @@
+echo_pwd.sh
+#!/bin/sh
+echo UGFzc3dvcmQxCg== | openssl enc -base64 -d
+
+
+
+echo "test" | openssl enc -base64        to encode
+echo "dGVzdAo=" | openssl enc -base64 -d    to decode
