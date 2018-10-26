@@ -1,0 +1,28 @@
+---
+- name: passwordless configuration
+  hosts:  "{{ servernames }}"
+  ignore_errors: yes
+  tasks:
+    - name: Raw command
+      command: pwd
+      args:
+       chdir: /home/{{ user }}
+    - name: create .ssh directory under {{ user }} home directory
+      file:
+        dest: /home/{{ user }}/.ssh/
+        state: directory 
+        owner: "{{ user }}"
+        group: "{{ group }}"
+        mode: 0700
+        recurse: yes 
+
+    - name: create authorized_keys file under .ssh directory
+      file:
+        path: /home/{{ user }}/.ssh/authorized_keys
+        state: touch
+        owner: "{{ user }}"
+        group: "{{ group }}"
+        mode: 0600
+
+    - name: copying ssh key to authorized_keys file
+      shell: "echo {{ ssh_key }} >> /home/{{ user }}/.ssh/authorized_keys"
