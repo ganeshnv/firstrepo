@@ -1,0 +1,174 @@
+Working part in Tower:
+
+12.	Create Tower Inventories in the ORG (ex: OFFERS) created in previous step by choosing INVENTORIES option in Tower. The naming convention used in this step subject to change by the standardization team.
+a.	Create 3 inventories using the following naming standards PlatfromName_DEV , PlatfromName_LLE , PlatfromName_PROD. 
+Ex: CCM_DEV , CCM_LLE , CCM_PROD
+b.	Create Groups inside inventories (1 group per ENV ( ex: DEV04 , CIT03 etc.) per install type (ex : DM , NODE , WEB etc ) by choosing naming standards PlatfromName_DM_ENVName. 
+i.	For DMGR type Deployment use the following standards PlatfromName_DM_ENVName .
+ii.	For NODE type deployment use the following Standards. 
+PlatfromName_NODE_ENVName. 
+c.	Add respective hosts in respective Groups created in the previous step. 
+
+13.	Create Machine and SCM CREDENTIALS for Deployment service ID’s (Ex: cddqc1n , cddqc1p)  by choosing settings in Tower.
+a.	SCM Access by giving below Details
+Browse SETTINGS > CREDENTIALS > EDIT CREDENTIAL Provide Name , ORG , Credential Type : Source Control , USERNAME : Any name , SCM Private Key : need to add the Private key which is generated in previous step for the deployment service ID.
+
+ 
+
+b.	Machine Login 
+Browse SETTINGS > CREDENTIALS > EDIT CREDENTIAL > Provide Name, ORG , Credential Type : Machine , USERNAME : cddqc1n SCM Private Key : need to add the Private key which is generated in previous step for the deployment service ID.
+
+                         
+
+
+
+
+
+14.	Create projects by choosing Project Template in Tower.
+
+NAME : 	Provide the Name of the Project to create and the name should be like AIT short name/repo name/app name (AIT short name/repo name/app name)
+DESCRIPTION	Provide the details of the project what are creating for.
+ORGANIZATION	Provide ORG Details which created in previous step.
+SCM Type 	Provide the appropriate Source repo to get the project details
+SCM URL 	Paste the GIT Repository URL to pick the product details
+SCM BRANCH 	Provide the Brach details of the product. 
+SCM Credential	Provide the SCM credential which created in previous step. 
+      
+ 	Below are the details used for OFFERS Pilot:
+
+a.	NAME : OFFERS/ppe_delivery/Pilot2_NP
+b.	ORGANIZATION : OFFERS
+c.	SCM Type : GIT
+d.	SCM URL : ssh://git@code.bankofamerica.com:7999/offers/ppe_delivery.git ( This can be get by cloning the Repo name from BITBUCKET )
+e.	SCM BRANCH : feature/Onboarding_test  ( This can get by seeing the Git Repo )
+f.	SCM Credential: Choose the credential created for SCM branch.  
+
+              
+
+    NOTE:  For OFFERS Pilot, we have 2 projects one is for WebSphere component deployment and the other is to deploy config files. 
+
+15.	Create project Template by choosing the Template tab in Tower and below are the details.
+
+NAME	Name of the Project to create and the name should be like AIT short name/repo name/app name
+DESCRIPTION 	This defines the description of the project
+JOB TYPE	This defines the mode of job exception 1. Run - run and execute 2. Check - run the job and will not commit the changes
+INVENTROY	This defines the inventory on which the playbook need to execute
+PROJECT	Name of the Project to create and the name should be like AIT short name/repo name/app name
+PLAYBOOK	This defines the playbook to execute.
+CREDENTIAL	This defines the credential to choose for machine login to target machine
+FORKS	This defines how many parallel executions can happen at the time of play book execution , by default it is 0
+LIMIT	This defines the hosts which are effected by playbook execution. 
+VERBOSITY	This defines the level of output ansible will produce as the play book executes.
+JOB TAGS	This defines to execute specific part of larger playbook.
+SKIP TAGS	This defines to skip any part from the larger playbook
+LABLES	This defines to help in identifying the job details eg : DEV , PROD etc
+Extra variables 	These are variables which are passing external to the playbook for the execution. 
+
+Below are the details used for OFFERS Pilot :
+
+NAME: OFFERS\ppe_delivery\Pilot2_NP
+JOB TYPE: Run
+INVENTROY: Check mark prompt on launch.
+PROJECT: OFFERS/ppe_delivery/Pilot2_NP
+PLAYBOOK: WAS_Deploy_new.yml
+CREDENTAIL: OFFERS/NP_Pilot/NP_CRE_CDDQC1N
+EXTRA VARIABLES:
+---
+componentname: ppeear
+publishedartifacturl:
+  - >-
+    http://code-artifacts.bankofamerica.com:18081/artifactory/libs-snapshots-local-maven/com/baml/offers/ppe_build/1.0.2/PPEEAR.ear
+
+NOTE:  For OFFERS Pilot, we have 2 projects one is for WebSphere component deployment and the other is to deploy config files.
+
+ 
+
+16.	Create TEAMS to provide appropriate access to the Inventory , Templates , users 
+a.	Create 3 TEAMS (ex: CCM_DEV, CCM_LLE, CCM_PROD) by Browsing SETTINGS>TEAMS >ADD by providing details as below. 
+NAME: CCM_DEV
+ORG: OFFERS
+b.	Click on the newly created group and add users with appropriate permissions and do for all the Groups.
+c.	Click on the newly created group > PERMISSIONS > ADD and add the following :  
+Use permissions for the inventory that the team is responsible to deploy the products.
+Use permissions for required Project
+Execute permissions for required Templates
+Example Screen shot:
+
+ 
+
+ 
+Working part on Playbooks (WebSphere): 
+
+Play 1: The play book for deploying EAR is 
+
+http://code.bankofamerica.com:7990/projects/OFFERS/repos/ppe_delivery/browse/WAS_Deploy_new.yml
+
+1.	  We need to pass the below set of variables for the execution of playbook.
+
+a.	Variables passing from console from external variables option
+
+componentname	Name of the component to deploy
+publishedartifacturl	URL of the product with version 
+
+Below are the sample values passing for DEV04 env
+---
+componentname: ppeear
+publishedartifacturl:
+  - >-
+    http://code-artifacts.bankofamerica.com:18081/artifactory/libs-snapshots-local-maven/com/baml/offers/ppe_build/1.0.2/PPEEAR.ear
+
+b.	Variables passing from external file
+ 
+app	Name of the Application 
+artifactorypwd	password to connect ARTIFACTORY
+artifactoryuser	Username to connect ARTIFACTORY
+cellcode	Cell code of the DMGR
+platformname	The platform name of the WebSphere
+wasenvname	defines the WebSphere env 
+
+Below are the sample values passing for DEV04 env
+
+app: PPE
+artifactorypwd: '00000000'
+artifactoryuser: code-offers-ppe_build-user
+cellcode: D04
+platformname: CCM
+wasenvname: DEV04
+
+Play 2:  Play book for copying prop Files.
+
+http://code.bankofamerica.com:7990/projects/OFFERS/repos/ppeprops_delivery/browse/CopyFiles_new.yml?at=refs%2Fheads%2Ffeature%2Fonboarding
+
+2.	We need to pass the below set of variables for the execution of playbook.
+
+c.	Variables passing from console from external variables option
+
+componentname	Name of the component to deploy
+publishedartifacturl	URL of the product with version 
+
+Below are the sample values passing for DEV04 env
+---
+componentname: ppeprops
+publishedartifacturl:
+  - >-
+    http://code-artifacts.bankofamerica.com:18081/artifactory/libs-snapshots-local-maven/com/baml/offers/ppeprops_build/1.0.7/ppe.zip
+
+d.	Variables passing from external file
+ 
+app	Name of the Application 
+artifactorypwd	password to connect ARTIFACTORY
+artifactoryuser	Username to connect ARTIFACTORY
+cellcode	Cell code of the DMGR
+platformname	The platform name of the WebSphere
+wasenvname	defines the WebSphere env 
+
+Below are the sample values passing for DEV04 env
+
+app: PPE
+artifactorypwd: '00000000'
+artifactoryuser: code-offers-ppe_build-user
+cellcode: D04
+platformname: CCM
+appenvname: DEV4
+wasenvname: DEV04
+
