@@ -1,7 +1,7 @@
 Device info:
  #cd /proc/scsi/
  
- 
+ echo test > /tmp/test && rm -f /tmp/test && echo success || echo failure
  
  
  
@@ -14,8 +14,16 @@ Device info:
  openssl s_client -connect IP:PORT -cipher "DES:3DES" -tls1_2
  openssl ciphers -v  "ciphername"
  
+ /usr/bin/keytool -list -v -keystore cert.pfx -storepass Password1 | egrep 'Creation|Owner|Valid|Serial|sort'
  
  
+ 
+ 
+ curl -ILv http://localhost:port
+ export TMOUT=0
+ 
+ du -hsc * | sort -n -r | head -20
+ du -s * | sort -n | cut -f2 | tr '\n' '\0' | xargs -0 -I {} du -sh "{}"
  
  
  
