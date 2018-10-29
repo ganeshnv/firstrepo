@@ -1,0 +1,202 @@
+ansible-playbook deployment1.yml --extra-vars "release_no=17_11_25 test=test1"
+
+ansible-playbook deployment1.yml --extra-vars or -e "release_no=17_11_25"
+
+ansible hostname -m ping -u user --ask-pass
+
+ssh://github.com/reponame/ansible.git
+
+
+   66  git -c http.sslVerify=false clone https://github.com/reponame/ansible.git
+   67  ls
+   68  cd ansible/
+   69  ll
+   71  git add --all
+   78  git commit -m "origin/master"
+   81  git -c http.sslVerify=false push
+
+
+
+
+fail:
+    msg: "{{ env }} deployment is not allowed from {{ scm_branch }} branch. master branch should be used"
+  when:
+    - env == "prod"
+    - scm_branch != "master"
+
+=======
+register: snap_result
+
+- set_fact: snap={{ snap_result.stdout }}
+=======
+- name: set var
+  set_fact:
+    art_urls: "{{ web_response.content | from_json}}"
+
+when: art_urls['results'][0] is undefined
+
+- debug: var=copy.stdout_lines
+
+
+
+
+
+
+
+
+---
+- hosts: localhost
+  tasks:
+
+    - name: Copy auto.home script from efs
+      copy:
+        src: /efs/dist/linux/RHEL-6/SOE-RHEL-6.8-2H16/common/stack/scripts/simple_auto_home
+        dest: /etc/auto.home
+        mode: 0755
+
+    - name: Updating autofs.master
+      lineinfile:
+        dest: "/etc/auto.master"
+        owner: root
+        group: root
+        mode: 0644
+        state: present
+        create: yes
+        line: "/home /etc/auto.home"
+
+    - name: autofs resatrt
+      service:
+        name: autofs
+        state: restarted
+        enabled: yes
+
+
+vars:
+    greeting: "you didn't specify a message"
+
+
+
+/etc/ansible/ansible.cfg:
+ [privilege_escalation]
+ become_method = pbrun
+ become_exe = /usr/local/bin/pbrun
+
+edit: ansible/lib/ansible/playbook/play_context.py
+ REPLACE:
+ becomecmd = '%s -b %s -u %s %s' % (exe, flags, self.become_user, success_cmd)
+ WITH:
+ cmd = cmd.replace("LANG=en_US.UTF-8 ", "")
+ cmd = cmd.replace("LC_MESSAGES=en_US.UTF-8 ", "")
+ cmd = cmd.replace("LC_ALL=en_US.UTF-8 ", "")
+ becomecmd = 'echo %s; %s -b -l %s -u %s %s' % (success_key, exe, flags, self.become_user, cmd)
+ 
+ 
+ 
+ ---
+- hosts: vdev
+  vars_files:
+    - ./group_vars/secret.yml
+    - ./group_vars/productsbk.yml
+  vars:
+      ArtifactURL: 
+      artifactoryUser:
+  tasks:
+    - name: Main
+      include: loop1.yml
+      loop_control:
+        label:
+      #   - "{{ item.0.name }}"
+      #   - "{{ item.0.version }}"
+         - "{{ item.1 }}"
+      with_subelements:
+        - "{{ Product }}"Hi 
+        - subfiles
+        
+        
+        
+        
+        
+        git clone
+git status
+git fetch
+git pull
+git checkout
+git add --all
+git status
+git commit -m "" (message)
+git push origin feature/test-22
+
+
+
+
+
+#!/efs/dist/python/core/2.7.13/exec/bin/python2.7
+import os
+import socket
+import requests
+import json
+from os import getenv
+
+
+ENV = os.environ['ENV'] 
+PLATFORM= os.environ['PLATFORM'] 
+SRVTYPE= os.environ['SRVTYPE'] 
+
+url = "https://hostname/APIapp/api/getdetails?servertype="+SRVTYPE+"&plat="+PLATFORM+"&env="+ENV
+# Get the feed
+response = requests.get(url)
+
+# Convert it to a Python dictionary
+data = json.loads(response.text)
+tmp = "NA"
+count=0
+flag=0
+mylist = []
+my_list = [[]]
+for val in data["Table"]:
+   server = socket.getfqdn(val["IP"])
+   PLAT_STYPE_ENV = val["PLATFORM"]+"_"+val["SERVERTYPE"].replace(" ","")+"_"+val["ENVI"]
+   if tmp != val["SERVERTYPE"]:
+      mylist.append(PLAT_STYPE_ENV)
+      my_list[count].append(server)
+      if flag == 1 :
+         count=count+1
+   elif tmp == val["SERVERTYPE"]:
+      my_list[count].append(server)
+      flag=1
+   tmp = val["SERVERTYPE"]
+data=[]
+item = { }
+for feature in mylist:
+    item = {feature: my_list[0] }
+    data.append(item)
+jsonData=json.dumps(data)
+
+jsonData = jsonData.strip('[]')
+
+print jsonData
+
+
+
+
+ansible_python_interpreter    --- for python path set
+        
+        
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
