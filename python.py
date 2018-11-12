@@ -1,1 +1,1 @@
-echo "test"
+open('1.txt', 'w')
