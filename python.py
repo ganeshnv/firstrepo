@@ -1,1 +1,1 @@
-open('1.txt', 'w')
+open('test.txt', 'w')
