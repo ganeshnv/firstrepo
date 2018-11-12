@@ -11,4 +11,3 @@
       command: ./python.py
       args:
         chdir: /tmp
-      
