@@ -1,0 +1,14 @@
+---
+- hosts: all
+  tasks:
+    - name: download the script
+      get_url:
+        url: wget https://github.com/ganeshnv/firstrepo/raw/master/python.py
+        dest: /tmp/python.py
+        user: ansible
+        group: ansible
+        mode: 0775
+        
+    - name: execute python script
+      script: /tmp/python.py
+      
