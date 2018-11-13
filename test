@@ -1,1 +1,18 @@
 https://stackoverflow.com/questions/42022903/run-python-script-with-arguments-in-ansible
+
+
+https://raw.githubusercontent.com/<username>/<repo-name>/<branch-name>/path/to/file
+
+http://raw.githubusercontent.com/<username>/<repo>/<branch>/path/to/file.js
+
+Use this URL to get the latest version:
+http://cdn.jsdelivr.net/gh/<username>/<repo>/path/to/file.js
+
+Use this URL to get a specific version or commit hash:
+http://cdn.jsdelivr.net/gh/<username>/<repo>@<version or hash>/path/to/file.js
+
+
+
+https://raw.github.com/.. => https://rawgithub.com/ 
+
+rawgithub.com redirects to rawgit.com 
