@@ -183,7 +183,52 @@ jsonData = jsonData.strip('[]')
 print jsonData
 
 
+================================
+#!/usr/bin/env python2.7
+# coding: utf-8
+import os
+import socket
+import requests
+import json
+import urllib2
+import unicodedata
+from os import getenv
+from collections import OrderedDict
 
+def fetchData():
+    ENV = os.environ['ENV'] 
+    PLATFORM= os.environ['PLATFORM'] 
+    SRVTYPE= os.environ['SRVTYPE'] 
+    if SRVTYPE == 'ALL':
+       url = "https://services.coreitse.bankofamerica.com/APIapp/api/getformateddata?plat="+PLATFORM+"&env="+ENV      
+    else:
+       url = "https://services.coreitse.bankofamerica.com/APIapp/api/getformateddata?sertype="+SRVTYPE+"&plat="+PLATFORM+"&env="+ENV
+  
+    headers = {"Accept":"application/json"}
+    response = requests.get(url)
+  
+    if response.status_code != 200:
+       print('Status:', response.status_code, 'Headers:', response.headers, 'Error Response:',response.json())
+       exit()
+    data = json.loads(response.text)
+    d = {}
+    l = []
+    for k,v in data.iteritems():
+     for i in v:
+       l.append(i.values())
+  
+    for i in l:
+      if d.get(i[1]):
+        d[i[1]].append(i[0])
+      else:
+        d[i[1]] = [i[0]]
+
+    allVals = d.keys()
+    d[ENV+'_'+PLATFORM] =  {"children" : allVals}
+    dataDict = json.dumps(d)
+    return dataDict
+
+print fetchData()
 
 ansible_python_interpreter    --- for python path set
         
