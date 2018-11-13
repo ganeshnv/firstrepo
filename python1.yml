@@ -16,3 +16,8 @@
       command: /usr/bin/python python.py
       args:
         chdir: /tmp/firstrepo-master/
+        
+    - name: remove the repo
+      command: rm -rf master.zip firstrepo-master
+      args:
+        chdir: /tmp
