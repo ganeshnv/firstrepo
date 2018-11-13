@@ -1,0 +1,18 @@
+---
+- hosts: localhost
+  tasks:
+    - name: download the script
+      get_url:
+        url: https://github.com/ganeshnv/firstrepo/archive/master.zip
+        validate_certs: false
+        dest: /tmp/master.zip
+    
+    - name: unzip the repo
+      command: unzip master.zip
+      args:
+        chdir: /tmp
+
+    - name: execute python script
+      command: /usr/bin/python python.py
+      args:
+        chdir: /tmp/firstrepo-master/
