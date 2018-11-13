@@ -39,7 +39,7 @@ SCM Credential	Provide the SCM credential which created in previous step.
 a.	NAME : OFFERS/ppe_delivery/Pilot2_NP
 b.	ORGANIZATION : OFFERS
 c.	SCM Type : GIT
-d.	SCM URL : ssh://git@code.bankofamerica.com:7999/offers/ppe_delivery.git ( This can be get by cloning the Repo name from BITBUCKET )
+d.	SCM URL : ssh://git@github.com:7999/offers/ppe_delivery.git ( This can be get by cloning the Repo name from BITBUCKET )
 e.	SCM BRANCH : feature/Onboarding_test  ( This can get by seeing the Git Repo )
 f.	SCM Credential: Choose the credential created for SCM branch.  
 
@@ -77,7 +77,7 @@ EXTRA VARIABLES:
 componentname: ppeear
 publishedartifacturl:
   - >-
-    http://code-artifacts.bankofamerica.com:18081/artifactory/libs-snapshots-local-maven/com/baml/offers/ppe_build/1.0.2/PPEEAR.ear
+    http://localhost:18081/artifactory/libs-snapshots-local-maven/com/baml/offers/ppe_build/1.0.2/PPEEAR.ear
 
 NOTE:  For OFFERS Pilot, we have 2 projects one is for WebSphere component deployment and the other is to deploy config files.
 
@@ -101,7 +101,7 @@ Working part on Playbooks (WebSphere):
 
 Play 1: The play book for deploying EAR is 
 
-http://code.bankofamerica.com:7990/projects/OFFERS/repos/ppe_delivery/browse/WAS_Deploy_new.yml
+http://localhost:7990/projects/OFFERS/repos/ppe_delivery/browse/WAS_Deploy_new.yml
 
 1.	  We need to pass the below set of variables for the execution of playbook.
 
@@ -115,7 +115,7 @@ Below are the sample values passing for DEV04 env
 componentname: ppeear
 publishedartifacturl:
   - >-
-    http://code-artifacts.bankofamerica.com:18081/artifactory/libs-snapshots-local-maven/com/baml/offers/ppe_build/1.0.2/PPEEAR.ear
+    http://code.localhost:18081/artifactory/libs-snapshots-local-maven/com/baml/offers/ppe_build/1.0.2/PPEEAR.ear
 
 b.	Variables passing from external file
  
@@ -137,7 +137,7 @@ wasenvname: DEV04
 
 Play 2:  Play book for copying prop Files.
 
-http://code.bankofamerica.com:7990/projects/OFFERS/repos/ppeprops_delivery/browse/CopyFiles_new.yml?at=refs%2Fheads%2Ffeature%2Fonboarding
+http://code.localhost:7990/projects/OFFERS/repos/ppeprops_delivery/browse/CopyFiles_new.yml?at=refs%2Fheads%2Ffeature%2Fonboarding
 
 2.	We need to pass the below set of variables for the execution of playbook.
 
@@ -151,7 +151,7 @@ Below are the sample values passing for DEV04 env
 componentname: ppeprops
 publishedartifacturl:
   - >-
-    http://code-artifacts.bankofamerica.com:18081/artifactory/libs-snapshots-local-maven/com/baml/offers/ppeprops_build/1.0.7/ppe.zip
+    http://localhost.com:18081/artifactory/libs-snapshots-local-maven/com/baml/offers/ppeprops_build/1.0.7/ppe.zip
 
 d.	Variables passing from external file
  
