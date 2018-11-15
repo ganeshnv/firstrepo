@@ -9,6 +9,15 @@
         mode: 0755
 
     - name: execute python script
-      command: /usr/bin/python python.py
+      command: /usr/bin/python python.py {{ var1 }} {{ var2 }} {{ var3 }} {{ var4 }}
       args:
         chdir: /tmp
+
+
+
+import os
+
+URL= os.environ[1] 
+PLATFORM= os.environ[2] 
+SRVTYPE= os.environ[3]
+ENV= os.environ[4]
