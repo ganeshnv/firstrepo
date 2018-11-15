@@ -200,9 +200,9 @@ def fetchData():
     PLATFORM= os.environ['PLATFORM'] 
     SRVTYPE= os.environ['SRVTYPE'] 
     if SRVTYPE == 'ALL':
-       url = "https://services.coreitse.bankofamerica.com/APIapp/api/getformateddata?plat="+PLATFORM+"&env="+ENV      
+       url = "https://services.coreitse.com/APIapp/api/getformateddata?plat="+PLATFORM+"&env="+ENV      
     else:
-       url = "https://services.coreitse.bankofamerica.com/APIapp/api/getformateddata?sertype="+SRVTYPE+"&plat="+PLATFORM+"&env="+ENV
+       url = "https://services.coreitse.com/APIapp/api/getformateddata?sertype="+SRVTYPE+"&plat="+PLATFORM+"&env="+ENV
   
     headers = {"Accept":"application/json"}
     response = requests.get(url)
