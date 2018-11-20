@@ -1,0 +1,7 @@
+[test]
+server1 variable1=value1 variable2=value2
+server2 variable11=value11 variable22=value22
+
+[test:vars]
+groupvar1=value1
+groupvar2=value2
