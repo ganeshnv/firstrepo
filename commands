@@ -27,6 +27,52 @@ Device info:
  
  
  
+sed -i 's/JRE8_WININF_Install.EXE/DisableSMBv1_WinINF_Install.EXE/g'    1.0.1
+sed -i 's/JRE8_WININF_Install.EXE/IncrementalSiteIDCreation_RegFix_Install.EXE/g'    1.0.0
+
+sed -i 's/JRE8_WININF_Install.EXE/GWMIIS8.5ConfigStandard_Install.EXE/g'    1.0.1
+sed -i 's/JRE8_WININF_Install.EXE/GWMAjax_Control_Toolkit_Install.EXE/g'     1.1.1
+sed -i 's/JRE8_WININF_Install.EXE/GWM_WIF_Install.EXE/g'                     1.0.0
+sed -i 's/JRE8_WININF_Install.EXE/F5XFFHttpModule_Install.EXE/g'             1.0.1
+
+sed -i  's/\(.*\)/#\1/g' filename   ----- comment all lines in a file
+sed -i  's/^#\(.*\)/\1/g' filename   ----- un-comment all lines in a file
+sed -i  's/^\([^#]\)/#\1/g' filename   ------ commenting only lines that aren't already commented in a file
+
+
+Intelligent_Monitoring_Install.EXE
+
+sed -i '/protocol="AJP\/1.3"/ c <Connector port="26'${i}'20" protocol="AJP/1.3" redirectPort="26'${i}'15" packetSize="65536" />' server.xml
+sed -i '/protocol="AJP\/1.3"/ c <Connector port="20'${i}'20" protocol="AJP/1.3" redirectPort="20'${i}'15" packetSize="65536" />' server.xml 
+
+/hosting/configs/tomcat8/tom_app-dev-02/conf/server.xml
+
+sed -i 's/protocol="AJP/1.3"/protocol="AJP/1.3"\/bpacketSize="65536"\/b/g' 
+
+
+sed 's/\bprotocol="AJP/1.3"/\b/& packetSize="65536"/' file
+
+sed -i '/protocol="AJP/1.3"/a packetSize="65536"' app.conf
+
+sed  '/<Connector port="20810"/,/\/>/d' server.xml
+
+sed '/.*=//
+
+sed '/tc_bofa.jks/ i keystoreType="PKCS12"' server.xml
+
+sed '/tc_bofa.jks/ c keystoreFile="/hosting/products/serverscerts/CERT_NAME"' server.xml
+
+sed -i '/authn_file_module/s/^/#/' httpd.conf
+
+sed -i '/authz_groupfile_module/s/^/#/' httpd.conf
+
+
+sed -i '/100'${i}'0/s/^/#/' httpd.conf
+
+sed -i '/160'${i}'0/s/^/#/' httpd.conf
+
+
+sed -n /$/p httpd.conf_org > httpd.conf
  
  
  
