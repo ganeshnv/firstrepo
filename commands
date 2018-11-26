@@ -27,6 +27,8 @@ Device info:
  
  
  
+ 
+ sed ‘/hello/,+2d’ file1   -- This command will delete the two lines starting with the first match of ‘hello’
 sed -i 's/JRE8_WININF_Install.EXE/DisableSMBv1_WinINF_Install.EXE/g'    1.0.1
 sed -i 's/JRE8_WININF_Install.EXE/IncrementalSiteIDCreation_RegFix_Install.EXE/g'    1.0.0
 
