@@ -1,0 +1,62 @@
+---
+- name: Mod Auth OIDC installation
+  hosts: localhost
+  ignore_errors: True
+  become: True
+  vars:
+    oidcfile: /etc/httpd/conf.d/openidc.conf
+  tasks:
+
+  - name: install mod_auth_openidc mod_ssl packages
+    yum:
+      name: "{{ item }}"
+      state: present
+    with_items: 
+      - mod_auth_openidc
+      - mod_ssl
+
+  - name: make an exception for selinux
+    command: setsebool httpd_can_network_connect=on
+  
+  - name: remove old conf file
+    file: 
+      path: "{{ oidcfile }}" 
+      state: absent
+
+  - name: openidc.conf file creation
+    file:
+      path: "{{ oidcfile }}"
+      state: touch
+
+  - name: OIDC configuration
+    shell: echo "{{ item }}" >> "{{ oidcfile }}"
+    with_items:
+      - LoadModule auth_openidc_module modules/mod_auth_openidc.so
+      - Listen 8443
+      - <VirtualHost *>
+      - ServerName localhost
+      - SSLEngine on
+      - SSLCertificateFile /etc/pki/tls/certs/localhost.crt
+      - SSLCertificateKeyFile /etc/pki/tls/private/localhost.key
+      - OIDCProviderMetadataURL https://localhost
+      - OIDCClientID <value>
+      - OIDCClientSecret <value>
+      - OIDCRedirectURI https://localhost
+      - OIDCResponseMode form_post
+      - OIDCJWKSRefreshInterval 3600
+      - OIDCCryptoPassphrase test
+      - OIDCScope 'openid email roles'
+      - <Location />
+      - AuthType openid-connect
+      - <RequireAll>
+      - Require valid-user
+      - Require claim role:<value>
+      - </RequireAll>
+      - </Location>
+      - </VirtualHost>
+ 
+  - name: Restart httpd service
+    service:
+      name: httpd
+      state: restarted
+      enabled: yes
