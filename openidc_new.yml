@@ -1,0 +1,51 @@
+---
+- name: Mod Auth OIDC installation
+  hosts: localhost
+  ignore_errors: True
+  gather_facts: False
+  become: True
+  vars_prompt:
+    - name: "bitbucketuser"
+      prompt: "Enter your bitbucket username"
+      private: no
+    - name: "bitbucketpassword"
+      prompt: "Enter your bitbucket password"
+      private: yes
+  roles:
+    - role: roles/OIDC
+
+  tasks:
+
+  - name: clone Bitbucket repo
+    git:
+      repo: https://{{ bitbucketuser }}:{{ bitbucketpassword }}@github.com/ganeshnv/firstrepo.git
+      dest: /tmp/firstrepo
+    tags: test
+
+  - name: install mod_auth_openidc mod_ssl packages
+    import_role:
+      name: OIDC
+
+  - name: make an exception for selinux
+    command: setsebool httpd_can_network_connect=on
+  
+  - name: remove old conf file
+    file: 
+      path: "{{ oidcfile }}" 
+      state: absent
+
+  - name: openidc.conf file creation
+    file:
+      path: "{{ oidcfile }}"
+      state: touch
+
+  - name: OIDC configuration
+    template:
+      src: roles/OIDC/templates/openidc.conf.j2
+      dest: "{{ oidcfile }}"
+
+  - name: Restart httpd service
+    import_role:
+      name: OIDC
+      tasks_from: http
+

@@ -1,0 +1,24 @@
+LoadModule auth_openidc_module modules/mod_auth_openidc.so
+Listen 8443
+ <VirtualHost *>
+	  ServerName oidcexample.livetv-ifs.com
+	  SSLEngine on
+	  SSLCertificateFile /etc/pki/tls/certs/localhost.crt
+	  SSLCertificateKeyFile /etc/pki/tls/private/localhost.key
+	  OIDCProviderMetadataURL https://quicksilver.livetv-ifs.com:44380/identity/.well-known/openid-configuration
+	  OIDCClientID 3b58f00a-3fbf-4a35-b624-4b4893589874
+	  OIDCClientSecret 6157279f-15ec-44f3-9f7d-3d50a63a966a
+	  OIDCRedirectURI https://oidcexample.livetv-ifs.com:8443/redirect_uri
+	  OIDCResponseMode form_post
+	  OIDCJWKSRefreshInterval 3600
+	  OIDCCryptoPassphrase test
+	  OIDCScope 'openid email roles'
+		   <Location />
+				  AuthType openid-connect
+				  <RequireAll>
+						Require valid-user
+						Require claim role:Thales
+				  </RequireAll>
+		  </Location>
+  </VirtualHost>
+
