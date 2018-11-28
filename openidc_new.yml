@@ -12,7 +12,7 @@
       prompt: "Enter your bitbucket password"
       private: yes
   roles:
-    - role: roles/OIDC
+    - role: /tmp/firstrepo/roles/OIDC
 
   tasks:
 
