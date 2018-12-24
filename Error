@@ -15,3 +15,6 @@ ErrorDocument 501 /error/HTTP_NOT_IMPLEMENTED.html
 ErrorDocument 502 /error/HTTP_BAD_GATEWAY.html
 ErrorDocument 503 /error/HTTP_SERVICE_UNAVAILABLE.html
 ErrorDocument 506 /error/HTTP_VARIANT_ALSO_VARIES.html
+
+
+403 represent forbidden error, means if a file misses some selinux security context.
