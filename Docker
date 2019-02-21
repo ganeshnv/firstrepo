@@ -1,0 +1,239 @@
+Docker written in go language -- Google's language
+
+Docker port - 2376
+
+container:
+If images is a class, then container is a instances of the image
+
+labs.play-with-docker.com
+
+https://hub.docker.com/
+
+codespaces.io   --port is 8000
+
+https://github.com/initcron
+https://github.com/dockersamples/example-voting-app     redis ( memory cacheing service ) also its a database
+https://github.com/jleetutorial/kubernetes-demo
+
+
+Namespaces:
+file system
+network
+uts
+pid
+user
+
+cgroups:
+control resources
+resource accounting
+
+Overlay file system, Aufs
+
+
+namespaces,cgroup, selinux, netlink, netfilter, capabilities, apparmor
+
+
+Registry  -- public
+DTR - Docker truster registry   -- private
+
+
+Commands:
+
+container
+image
+network
+node
+plugin
+secret
+service
+stack
+swarm
+system
+volume
+
+
+
+command line docker client
+kitematic docker client
+
+
+
+
+
+Images - The file system and configuration of our application which are used to create containers
+
+docker image inspect <imagename> 
+
+
+Containers - Running instances of Docker Images
+
+Layers - A Docker image is built up from a series of layers. 
+Each layer represents an instruction in the image’s Dockerfile. Each layer except the last one is read-only.
+
+•Dockerfile - A text file that contains all the commands, in order, needed to build a given image. 
+The Dockerfile reference page lists the various commands and format details for Dockerfiles.
+
+•Volumes - A special Docker container layer that allows data to persist and be shared separately from the container itself.
+Think of volumes as a way to abstract and manage your persistent data separately from the application itself.
+
+
+
+
+
+
+
+
+Docker has a program, which builds containers from code,  it uses a layered filesystem (AuFS)
+
+Docker gives you the ability to snapshot the OS into a shared image, and makes it easy to deploy on other docker hosts. Locally, dev, qa, prod, etc.: all the same image. Sure you can do this with other tools, but not nearly as easily or fast
+
+Docker was initially using LXC driver, then moved to libcontainer which is now renamed as runc.
+
+Totally 3 values:
+
+digest number
+image ID
+container ID   --- as first part of digest value
+
+docker -v
+docker version
+docker system info
+
+docker-compose --version
+
+service docker start
+
+docker run hello-world
+
+docker images
+
+Repository --> ubuntu
+tag        --> latest
+Image ID   --> 43j3hjbkj34
+Created    --> 5 mins ago
+size       --> 122 MB
+
+docker run repository/image:tag command [argument]
+
+docker run -it ubuntu:latest bash
+
+docker ps  ---> shows current running container status
+
+docker ps --format $FORMAT (--format=$FORMAT)  --> shows vertical manner.
+ 
+ID        --> jg45ui5354jk5
+Image     --> ubuntu:latest
+command   --> bash
+created   --> 5 mins ago
+status    --> up about a minute
+port      --> shows it's there any port mentioned
+Names     --> shows if name mentioned.
+
+echo $FORMAT
+
+
+docker ps -a   ----> shows all container
+docker ps -l   ----> shows last logout container
+
+
+
+docker commit container ID ---> It ll generate the digest value 
+docker tag  <digestvalue> <new repository name>
+
+     (or)
+
+docker commit <containername> <new repository name>
+
+
+
+docker run --rm -ti ubuntu bash  ----> It ll delete the container after exist.
+
+docker run -ti ubuntu bash -c "sleep 3; echo all done"  ---> exist after 3 second and shows done status.
+
+docker run -d -ti ubuntu bash  ---> create(backend) and suddenly exist
+
+docker attach <containername>  ---> Enter into container
+
+docker exec -ti <containername> bash   ----> To run same container on different terminal
+
+
+docker logs
+docker logs  <container-name>
+
+docker run --name example -d ubundu bash -c "lose /etc/passwd"
+docker logs example
+
+output: bash:lose:command not found
+
+
+docker kill container-name
+docker rm   container-name
+
+
+docker run --memory maximum-allowed-memory image-name command
+
+
+docker run --cpu-shares relative to other containers
+docker run --cpu-quota to limit it in general
+
+                   -p host_port:container_port
+                    (inside)(outside)
+docker run -rm -ti -p 12345:12345 -p 12346:12346 --name example ubuntu bash  ---If you didn't give outside, it ll assign dynamically
+nc -lp 12345 | nc -lp 12346
+
+Then Go to hostnode,
+docker-machine IP -------> shows the IP(192.168.0.1)
+nc 192.168.0.1 12345   ---> 1st terminal
+nc 192,168.0.1 12346   ---> 2nd terminal
+If we type any thing in terminal 1, it goes to terminal 
+
+
+docker port example  ---> find the port on the container
+output:
+12345/tcp -->0.0.0.0/12345
+12346/tcp -->0.0.0.0/12346
+
+exposing UDP port
+
+docker run -p outside-port:inside-port/protocol(tcp/udp)
+docker run -p 1234:1234/udp
+
+
+============
+
+docker run -d -p 2345:2345 --name redis redis   --- create DB container
+
+docker run -d -P --name redis redis === P will assign IP dynamically
+
+docker run --link redis -it ubuntu bash   ====== link to ubuntu
+
+evn === to verify the envronment variable
+
+docker run -d -p 4567:4567 --link redis --name web httpd   --- link httpd to redis
+
+docker port web
+
+docker ps -l
+
+docker inspect web
+
+docker run -e "Test=test1" ubuntu bash -c export   ==== -e to assign envronment value
+
+
+alternate of Link, we can assign as a env variable
+
+
+docker run -d -p --name redis redis   -- get the IPaddress (172.17.0.2) then 
+
+docker run -d -e "REDIS_PORt_6379_TCP_ADDR=172.17.0.2" --name web -p 4567:4567 http
+
+Validate in browser:
+
+hostip:4567/load/hello
+
+docker restart redis
+
+docker logs -f redis
+
+docker stop --time 10 redis
+
