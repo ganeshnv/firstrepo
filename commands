@@ -84,7 +84,8 @@ sed -n /$/p httpd.conf_org > httpd.conf
  
  find . -maxdepth 1 -name "autostopstart.sh*" |xargs rm -f
  
- 
+ # Mark and remove xml comments and later remove blank lines 
+sed 's/<!--/\x0<!--/g;s/-->/-->\x0/g' server.xml | grep -zv '^<!--' | tr -d '\0' |sed '/^$/d; /^\s*$/d' 
  
  
  ====================
