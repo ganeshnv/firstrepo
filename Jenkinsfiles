@@ -1,0 +1,220 @@
+
+
+================
+node {
+
+     stage( 'find directory') {
+          if (isUnix()) {
+             sh "ls -la"
+           } else {
+             bat "dir"
+             }
+     }
+}
+
+================
+node {
+     stage('checkout') {
+     git https://github.com/ganeshnv/firstrepo.git
+     }
+     stage( 'run repo script') {
+     sh "./firstrepo.sh"
+     }
+}
+================
+node {
+      stage('credentials') {
+      withCredentials([usernameColonPassword(credentialsId:'testID', variable:'mycredentials')])
+        {
+          echo "My password is '${mycredentials}'!"
+        }
+      }
+}
+================
+
+
+
+node {
+  try {
+     stage('test') {
+        sh 'echo "Hello World"'
+        def obj = null
+        sh "${obj.class}"
+      }
+  }
+  catch (NullPointerException e) {
+  error 'broken pipeline = null pointer expection'
+  currentBuild.result = "FAILURE"
+  }
+}
+   
+ =====================
+
+node {
+  try {
+     stage('test') {
+        sh 'echo "Hello World"'
+        def obj = null
+        sh "${obj.class}"
+      }
+  }
+
+  catch (NullPointerException e) {
+  currentBuild.result = "UnSTABLE"
+  }
+}
+
+=======================
+
+node {
+     stage('test') {
+         try {
+            sh 'echo "Hello World"'
+            def obj = null
+            sh "${obj.class}"
+         }
+        catch (NullPointerException e) {
+        currentBuild.result = "UnSTABLE"
+        }
+     }
+
+     stage ('stage2'){
+     echo "stage 2 running"
+     }
+}
+ ====================
+
+node {
+  try {
+     stage('test') {
+        sh 'echo "Hello World"'
+        def obj = null
+        sh "${obj.class}"
+      }
+  }
+ 
+ catch (NullPointerException e) {
+  error 'broken pipeline = null pointer expection'
+  currentBuild.result = "FAILURE"
+  }
+  
+ Finally {
+  stage('post build'){
+  echo "This will always run"
+  }
+ }
+}
+
+========================
+
+node {
+  try {
+     stage('test') {
+        sh 'echo "Hello World"'
+        def obj = null
+        sh "${obj.class}"
+      }
+  }
+ 
+ catch (NullPointerException e) {
+  error 'broken pipeline = null pointer expection'
+  currentBuild.result = "FAILURE"
+  }
+  
+ Finally {
+  stage('sent mail'){
+  mail to: "test@gmail.com" ,
+       body: "something wrong with ${env.BUILD_URL}",
+       subject: "Failue Pilepile: ${currentBuild.fullDisplsyName}"
+
+  
+  }
+ }
+}
+
+
+
+
+==========================
+
+Declarative Pipeline
+
+sections  -- contains directives & steps
+{ agent, stages, post }
+directives -- stay inside the section or pipeline
+{Triggers, Parameters, Tools, stage, when }
+steps-- stay inside the stage
+{script}
+
+
+pipeline {
+
+ agent {
+     label 'linux'
+ }
+      tools {
+        maven 'maven_name'  
+      }
+      parameters {
+         string(name: 'VERSION',
+                defaultValue: '1.0.0',
+                description: 'build version'
+      }
+
+                
+ stages {
+      stage('Build')   {
+        steps {
+            sh "./build.sh ${params.VERSION}"
+            echo "Print the message after the message"
+
+                script {
+                    for (int i = 0; i < 5; i++) {
+                    echo "printing number"
+                    }
+                }
+        }
+     
+      }
+ }
+
+   post {
+     always {
+       echo "pipeline executed"
+     }
+   }
+
+} 
+   
+
+
+===============================
+Jenkinsfile
+
+pipeline {
+
+  agent { label 'linux' }
+  tools { maven 'maven_name' }
+
+  stages {
+     stage('checkout') {
+        steps  {
+           git "https://github.com/ganeshnv/firstrepo.git"
+         }
+     stage('Build') {
+        steps {
+           sh 'mvn clean compile'
+        }
+     stage('Test') {
+        steps {
+           sh mvn test
+           junit '**/target/surefire-reports/TEST-*.xml'
+        }
+     stage('Package') {
+        steps {
+           sh 'mvn package'
+        }
+
+}
+
+====================================
