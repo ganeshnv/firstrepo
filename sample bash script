@@ -1,0 +1,25 @@
+#!/bin/bash
+
+if [ "$#" -ge 1 ]; then
+n=0
+
+for i in $*
+do
+   check=`echo "$i" | grep -E ^\-?[0-9]*\.?[0-9]+$`
+     if [ "$check" != '' ] ; then
+  # it IS numeric
+
+         n=`expr $i + $n`
+     else
+         echo usage:- $0 space-separated-integers
+         exit 0
+
+fi
+done
+echo $n
+
+else
+         echo usage:- $0 space-separated-integers
+         exit 0
+ fi
+
