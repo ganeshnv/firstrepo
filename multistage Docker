@@ -1,0 +1,14 @@
+FROM golang:alpine AS builder
+
+WORKDIR /go/src/
+
+RUN apk update && apk add --no-cache git && go get -d -v golang.org/x/net/html
+COPY app.go /go/src/app.go
+
+RUN CGO_ENABLED=0 GOOS=linux go build -a -installsuffix cgo -o /go/src/app
+
+FROM scratch
+
+COPY --from=builder /go/src/app /root/app
+
+ENTRYPOINT ["/root/app"]
