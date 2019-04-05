@@ -218,3 +218,100 @@ pipeline {
 }
 
 ====================================
+
+Docker with Jenkinsfile
+First need to install Docker on jenkins node
+
+pipeline {
+    agent { docker 'maven:3.5-alpine' }
+    stages {
+       stage('Build') {
+          steps {
+             sh 'mvn --version'
+          }
+       }
+    }
+}
+
+==============================
+
+pipeline {
+    agent none
+    stages {
+      stage('Build') {
+         agent { docker 'maven:3.5-alpine' }
+         steps {
+            echo 'Hello Maven'
+            sh 'mvn --ersion'
+         }
+      }
+      stage('Build2') {
+         agent { docker 'openjdk:8-jre' }
+         steps {
+            echo 'Hello JDK'
+            sh 'java -version'
+         }
+      }
+}
+
+==================
+
+Java Project
+
+https://github.com/effectivejenkins/spring-peteclinic.git
+
+Archieving & Fingerprint
+  
+
+build  >> pipeline steps >> Allocatenode >> workspace  >>>>> you can find the target directory
+
+pipeline {
+    agent { docker 'maven:3.5-alpine'}
+    stages {
+       stage('checkout') {
+          steps {
+             git 'https://github.com/effectivejenkins/spring-peteclinic.git'
+          }
+       }
+       stage('Build') {
+         steps {
+            sh 'mvn clean package'
+            junit '**/target/surefire-reports/TEST-*.xml'
+            archiveArtifacts artifacts: 'target/*.jar', fingerprint: true
+         }
+       }
+    }
+}
+
+========================
+
+
+Deploy
+
+pipeline {
+    agent { label 'linux'}
+    stages {
+       stage('checkout') {
+          steps {
+             git 'https://github.com/effectivejenkins/spring-peteclinic.git'
+          }
+       }
+       stage('Build') {
+         agent { docker 'maven:3.5-alpine'}
+         steps {
+            sh 'mvn clean package'
+            junit '**/target/surefire-reports/TEST-*.xml'
+            archiveArtifacts artifacts: 'target/*.jar', fingerprint: true
+         }
+       }
+       stage('Deploy') {
+          steps {
+             input 'Do you approve the deployment?'
+             sh 'scp target/*.jar jenkins@192.168.1.0:/opt/pet/'
+             sh "ssh jenkins@192.168.1.0 'nohup java -jar /opt/pet/sprint-petclinic-1.5.1.jar &'"
+          }
+       }
+    }
+}
+ 
+============================
