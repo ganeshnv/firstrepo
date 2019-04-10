@@ -1,0 +1,45 @@
+#!/efs/dist/python/core/2.7.13/exec/bin/python2.7
+import os
+import socket
+import requests
+import json
+from os import getenv
+
+
+ENV = os.environ['ENV'] 
+PLATFORM= os.environ['PLATFORM'] 
+SRVTYPE= os.environ['SRVTYPE'] 
+
+url = "https://services.coreitse.bankofamerica.com/APIapp/api/getdetails?servertype="+SRVTYPE+"&plat="+PLATFORM+"&env="+ENV
+# Get the feed
+response = requests.get(url)
+
+# Convert it to a Python dictionary
+data = json.loads(response.text)
+tmp = "NA"
+count=0
+flag=0
+mylist = []
+my_list = [[]]
+for val in data["Table"]:
+   server = socket.getfqdn(val["IP"])
+   PLAT_STYPE_ENV = val["PLATFORM"]+"_"+val["SERVERTYPE"].replace(" ","")+"_"+val["ENVI"]
+   if tmp != val["SERVERTYPE"]:
+      mylist.append(PLAT_STYPE_ENV)
+      my_list[count].append(server)
+      if flag == 1 :
+         count=count+1
+   elif tmp == val["SERVERTYPE"]:
+      my_list[count].append(server)
+      flag=1
+   tmp = val["SERVERTYPE"]
+data=[]
+item = { }
+for feature in mylist:
+    item = {feature: my_list[0] }
+    data.append(item)
+jsonData=json.dumps(data)
+
+jsonData = jsonData.strip('[]')
+
+print jsonData
