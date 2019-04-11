@@ -1,0 +1,75 @@
+Microservices:
+
+JHipster is a development platform
+
+Angular 5 -- framework
+
+service registry
+1, client side service registory
+2, server side service registory
+
+Health Check
+1, push configuration
+2, pull configuration
+
+
+
+
+docker compose file
+
+docker-compose.yml
+
+============
+mysql.yml
+
+version: '2'
+services:
+  mysql:
+    image: mysql:5.7.20
+    volume:
+      - /bin/mysql:/var/lib/mysql
+    environment:
+      - MYSQL_USER=root
+      - MYSQL_ALLOW_EMPTY_PASSWORD=yes
+      - MYSQL_DATABASE=demoapp
+    ports:
+      - 3306:3306
+    command: mysqld --lower_case_table_names=1 --skip-ssl --character_set_server=utf8 --explicit_defaults_for_timestamp
+==============
+
+app.yml
+
+version: 2
+services:
+  storeapp-app:
+    image: storeapp
+    environment:
+      - SPRINT_PROFILE_ACTIVE=prod,swagger
+      - CLIENT_SERVICE_URL=https://localhost:8761/config
+    ports:
+      - 8080:8080
+
+  storeapp-mysql:
+    extends:
+      file: mysql.yml
+      service: storeapp-mysql
+
+  registory-app:
+    extends:
+      file: registory.yml
+      service: registory
+    environment:
+      - SPRINT_CLOUD_CONFIG_SERVER_LOCATION=file:./central/docker-config/
+
+
+=============
+
+sonar.yml
+
+version: '2'
+services:
+  storeapp-sonar:
+    image: sonarqube:6.5-alpine
+    ports:
+      - 9000:9000
+      - 9092:9092
