@@ -10,7 +10,7 @@ ENV = os.environ['ENV']
 PLATFORM= os.environ['PLATFORM'] 
 SRVTYPE= os.environ['SRVTYPE'] 
 
-url = "https://services.coreitse.bankofamerica.com/APIapp/api/getdetails?servertype="+SRVTYPE+"&plat="+PLATFORM+"&env="+ENV
+url = "https://localhost/APIapp/api/getdetails?servertype="+SRVTYPE+"&plat="+PLATFORM+"&env="+ENV
 # Get the feed
 response = requests.get(url)
 
@@ -64,7 +64,7 @@ SRVTYPE=sys.argv[3]
 #PLATFORM= os.environ["PLATFORM"]
 #SRVTYPE= os.environ["SRVTYPE"]
 
-url = "https://services.coreitse.bankofamerica.com/APIapp/api/getdetails?servertype="+SRVTYPE+"&plat="+PLATFORM+"&env="+ENV
+url = "https://localhost/APIapp/api/getdetails?servertype="+SRVTYPE+"&plat="+PLATFORM+"&env="+ENV
 # Get the feed
 response = requests.get(url)
 
