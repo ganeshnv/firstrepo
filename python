@@ -43,3 +43,46 @@ jsonData=json.dumps(data)
 jsonData = jsonData.strip('[]')
 
 print jsonData
+
+
+
+================================
+
+#!/usr/bin/python
+import os
+import socket
+import requests
+import json
+from os import getenv
+import sys
+
+ENV=sys.argv[1]
+PLATFORM=sys.argv[2]
+SRVTYPE=sys.argv[3]
+
+#ENV = os.environ]
+#PLATFORM= os.environ["PLATFORM"]
+#SRVTYPE= os.environ["SRVTYPE"]
+
+url = "https://services.coreitse.bankofamerica.com/APIapp/api/getdetails?servertype="+SRVTYPE+"&plat="+PLATFORM+"&env="+ENV
+# Get the feed
+response = requests.get(url)
+
+# Convert it to a Python dictionary
+data = json.loads(response.text)
+#print data
+mylist = []
+for val in data["Table"]:
+   server = socket.getfqdn(val["IP_Address"])
+   mylist.append(server)
+#print mylist
+data=[]
+for feature in mylist:
+  #  item = {feature: my_list[0] }
+    data.append(feature)
+jsonData=json.dumps(data)
+
+jsonData = jsonData.strip('[]')
+
+print jsonData
+
