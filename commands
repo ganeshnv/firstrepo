@@ -209,7 +209,38 @@ exit 1;;
 
 esac
 
- 
+ export dir_array=( "a" "b" "c" "d" "e" )
+
+for i in ${dir_array[@]}
+do
+  echo $i
+done
+
+----
+
+echo "1.0.0" | sed -n 's/\./_/gp'
+
+--------
+
+if [ $# -lt 4 ];  then
+    echo "No arguments supplied"
+        exit 1
+
+-------
+i=0
+while [ $i -lt ${#products[@]} ]
+do
+echo $i
+done
+
+----------
+ENV=`echo $1| tr [:upper:] [:lower:]`
+
+-----------
+
+openssl ciphers -v | awk '{print $2}' | sort | uniq | tail -1
+
+-----------
  
  
  
