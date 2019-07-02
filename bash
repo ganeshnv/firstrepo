@@ -17,26 +17,26 @@ Ex: alias l="ls -lrt" -- it will work all terminal, export not required
 will execute while exit the bash terminal
 
 
-[root@lva68bdcgsas01v hosting]# echo 'my present dworking directory $(pwd)'
+[root@localhost / ]# echo 'my present dworking directory $(pwd)'
 my present dworking directory $(pwd)
-[root@lva68bdcgsas01v hosting]# echo " my present dworking directory $(pwd)"
+[root@localhost hosting]# echo " my present dworking directory $(pwd)"
  my present dworking directory /hosting
-[root@lva68bdcgsas01v hosting]# echo " my present dworking directory `pwd`"
+[root@localhost hosting]# echo " my present dworking directory `pwd`"
  my present dworking directory /hosting
-[root@lva68bdcgsas01v hosting]#
+[root@localhost hosting]#
 
 
 Foreground & Background
 
-[root@lva68bdcgsas01v hosting]# sleep 60   --- run command in foreground
+[root@localhost hosting]# sleep 60   --- run command in foreground
 ^Z                                         --- ctrl+z
 [1]+  Stopped                 sleep 60
-[root@lva68bdcgsas01v hosting]# bg %1      --- start at background
+[root@localhost hosting]# bg %1      --- start at background
 [1]+ sleep 60 &
-[root@lva68bdcgsas01v hosting]# fg %1      --- again start at foreground
+[root@localhost hosting]# fg %1      --- again start at foreground
 sleep 60
 ^C
-[root@lva68bdcgsas01v hosting]#
+[root@localhost hosting]#
 
 
 
