@@ -5,7 +5,7 @@ Device info:
  
  
  
- 
+ nmap -p 443 --script ssl-enum-ciphers pc-b.bitgravity.com
  openssl x509 -text -in /dev/stdin | grep "Signature Algorithm"
  openssl s_client -connect IP:PORT < /dev/null 2>/dev/null | openssl pkcs7 -print_certs -text -noout |grep  "Subject:"
  openssl s_client -connect IP:PORT < /dev/null 2>/dev/null | openssl dgst -sha256 -verify
